@@ -1078,23 +1078,45 @@ function sendMsg(){
   const subj=document.getElementById('ct-subject').value;
   const errEl=document.getElementById('ct-err');
   const btn=document.getElementById('ct-btn');
+
   errEl.classList.remove('show');
+
   if(!n){errEl.textContent='⚠ Please enter your name.';errEl.classList.add('show');return}
   if(!e||!e.includes('@')){errEl.textContent='⚠ Please enter a valid email.';errEl.classList.add('show');return}
   if(!m){errEl.textContent='⚠ Please write a message.';errEl.classList.add('show');return}
-  btn.disabled=true;btn.innerHTML='Sending…';
-  const tryEmailJS=new Promise((res,rej)=>{try{emailjs.send('YOUR_SERVICE_ID','YOUR_TEMPLATE_ID',{from_name:n,from_email:e,subject:subj,message:m,to_email:'sristijothidam@gmail.com'}).then(res).catch(rej)}catch(err){rej(err)}});
-  tryEmailJS.then(done).catch(()=>{
+
+  btn.disabled=true;
+  btn.innerHTML='Sending…';
+
+  emailjs.send('service_qvkjuw9','template_871vd3f',{
+    from_name:n,
+    from_email:e,
+    subject:subj,
+    message:m,
+    to_email:'sristijothidam@gmail.com'
+  })
+  .then(()=>{
+    done();
+  })
+  .catch(()=>{
     const wa=encodeURIComponent(`Message from ${n} (${e}):\nSubject: ${subj}\n\n${m}`);
-    window.open(`https://wa.me/919597774596?text=${wa}`,'_blank');done();
+    window.open(`https://wa.me/919597774596?text=${wa}`,'_blank');
+    done();
   });
-  function done(){btn.disabled=false;btn.innerHTML=lang==='ta'?'✦ செய்தி அனுப்பு':'✦ Send Message';document.getElementById('ct-ok').classList.add('show');['ct-name','ct-email','ct-msg'].forEach(id=>document.getElementById(id).value='');setTimeout(()=>document.getElementById('ct-ok').classList.remove('show'),6000)}
-}
-function nlSub(){
-  const e=document.getElementById('nl-email');
-  if(!e.value.trim()||!e.value.includes('@')){e.focus();return}
-  document.getElementById('nl-ok').classList.add('show');e.value='';
-  setTimeout(()=>document.getElementById('nl-ok').classList.remove('show'),5000);
+
+  function done(){
+    btn.disabled=false;
+    btn.innerHTML=lang==='ta'?'✦ செய்தி அனுப்பு':'✦ Send Message';
+    document.getElementById('ct-ok').classList.add('show');
+
+    ['ct-name','ct-email','ct-msg'].forEach(id=>{
+      document.getElementById(id).value='';
+    });
+
+    setTimeout(()=>{
+      document.getElementById('ct-ok').classList.remove('show');
+    },6000);
+  }
 }
 
 // ══════════════════════════════════════════════════════════════
@@ -1522,6 +1544,13 @@ document.addEventListener('DOMContentLoaded',()=>{
   gPage('home');
   setTimeout(()=>{try{renderPanchCard('home-panch')}catch(e){}},80);
 });
+</script>
+   <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+
+<script>
+(function(){
+  emailjs.init("ilrm9nqfcc7T3pWi5-m"); // your PUBLIC KEY
+})();
 </script>
 </body>
 </html>
